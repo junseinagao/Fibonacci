@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -19,7 +21,7 @@ public class MainClass {
 		frame.setVisible(true);
 
 		DrawingModel model = new DrawingModel();
-		Shape s = new FibonacciSquare();
+		Shape s = new FibonacciSquare(50,50,Color.BLUE,2,1);
 		model.addShape(s);
 		model.addView(panel);
 	}
