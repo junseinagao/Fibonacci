@@ -8,8 +8,7 @@ public class FibonacciSquare extends AbstractShape {
 	private  int quadrant;
 	private int n;
 	
-	
-	private int limit;
+	private int count;
 	private int fN;
 
 	private int arcX;
@@ -23,15 +22,15 @@ public class FibonacciSquare extends AbstractShape {
 	private int angle;
 	private int arcAngle =90;
 	
-	public FibonacciSquare(int x, int y, Color c, int quadrant,int limit) {
+	public FibonacciSquare(int x, int y, Color c, int quadrant,int n) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.c = c;
 		this.quadrant = quadrant;
-		this.n = 1;
-		this.limit = limit;
-		this.fN = FibonacciSequence(n);
+		this.count = 1;
+		this.n = n;
+		this.fN = FibonacciSequence(count);
 		updateDrawingParameter();
 		updateArc();
 	}
@@ -44,21 +43,21 @@ public class FibonacciSquare extends AbstractShape {
 	}
 	/*
 	 * Calculate fibonacci number
-	 * @param int n
+	 * @param int count
 	 * @return fibonacci number
 	 */
 	
-	public int FibonacciSequence(int n) {
-			if (n < 0) {
+	public int FibonacciSequence(int count) {
+			if (count < 0) {
 				return -1;
 			}
-			if (n == 0) {
+			if (count == 0) {
 				return 0;
 			}
-			if (n == 1) {
+			if (count == 1) {
 				return 1;
 			}
-			return FibonacciSequence(n - 1) + FibonacciSequence(n - 2);
+			return FibonacciSequence(count - 1) + FibonacciSequence(count - 2);
 	}
 
 	/*
@@ -99,51 +98,43 @@ public class FibonacciSquare extends AbstractShape {
 			
 	}
 	
-	public FibonacciSquare fibonacciTiles(int quadrant,int n) {
+	public FibonacciSquare fibonacciTiles(int quadrant,int count) {
 		int nextX;
 		int nextY;
 		
-		// (1) privious left upper == last right upper
-		// (2) privious left lower == last left upper
-			// x  == x
-			// y = 
-		// (3) privious right lower == last left lower
-		// (4) privious right upper == last right lower
-		
 		switch (quadrant) {
 		case 1:
-			nextX = x - (2 * 10 * FibonacciSequence(n+1));
+			nextX = x - (2 * 10 * FibonacciSequence(count+1));
 			nextY = y;
-			return new FibonacciSquare(nextX,nextY,Color.BLUE,2, limit);
+			return new FibonacciSquare(nextX,nextY,Color.BLUE,2, n);
 		case 2:
 			nextX = x;
 			nextY = y + rectHight;
-			return new FibonacciSquare(nextX,nextY,Color.BLUE,3, limit);
+			return new FibonacciSquare(nextX,nextY,Color.BLUE,3, n);
 		case 3:
-			if(n == 1) {
+			if(count == 1) {
 				nextX = x + rectWide;
 				nextY = y;
 			} else {
 				nextX = x + rectWide ;
-				nextY = y - (2 * 10 * FibonacciSequence(n+1)) + rectWide;
+				nextY = y - (2 * 10 * FibonacciSequence(count+1)) + rectWide;
 			}
-			return new FibonacciSquare(nextX,nextY,Color.BLUE,4, limit);
+			return new FibonacciSquare(nextX,nextY,Color.BLUE,4, n);
 		case 4:
-			nextX = x - (2 * 10 * FibonacciSequence(n+1)) + rectWide; // x = n.x + n.w - w
-			nextY = y - (2 * 10 * FibonacciSequence(n+1)); // y =
-			return new FibonacciSquare(nextX,nextY,Color.BLUE,1, limit);
+			nextX = x - (2 * 10 * FibonacciSequence(count+1)) + rectWide;
+			nextY = y - (2 * 10 * FibonacciSequence(count+1));
+			return new FibonacciSquare(nextX,nextY,Color.BLUE,1, n);
 			}
 		return null;
 		
 	}
 
-	public void recursiveTiles(int n,Graphics g,int limit) {
-		if (n < limit) {
-			// recursiveTiles(n-1,g,limit);
-			FibonacciSquare s = fibonacciTiles(quadrant,n);
-			s.n = n + 1;
-			s.fN = FibonacciSequence(s.n);
-			System.out.println(s.fN);
+	public void recursiveTiles(int count,Graphics g,int n) {
+		if (count < n) {
+			// recursiveTiles(count-1,g,n);
+			FibonacciSquare s = fibonacciTiles(quadrant,count);
+			s.count = count + 1;
+			s.fN = FibonacciSequence(s.count);
 			s.updateDrawingParameter();
 			s.updateArc();
 			s.draw(g);
@@ -152,7 +143,7 @@ public class FibonacciSquare extends AbstractShape {
 	
 	@Override
 	public void draw(Graphics g) {
-		recursiveTiles(n,g,limit);
+		recursiveTiles(count,g,n);
 		g.setColor(c);
 		g.drawRect(x, y, rectWide, rectHight);
 		g.drawArc(arcX, arcY, arcWide, arcHight, angle, arcAngle);
