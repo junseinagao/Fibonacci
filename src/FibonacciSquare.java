@@ -2,14 +2,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class FibonacciSquare extends AbstractShape {
-	private int x;
-	private int y;
-	private Color c;
 	private  int quadrant;
-	private int n;
+	private int n; // n is used as a limit 
 	
-	private int count;
-	private int fN;
+	private int count; // count is used for fibonacci number
+	private int fth;
 
 	private int arcX;
 	private int arcY;
@@ -22,6 +19,16 @@ public class FibonacciSquare extends AbstractShape {
 	private int angle;
 	private int arcAngle =90;
 	
+	
+	/*
+	 * Constractor arrange parameter and call update method to set  using various.
+	 * 
+	 * @pram int x
+	 * @pram int y
+	 * @pram Color c
+	 * @pram int quadrant
+	 * @pram int n refer number call fibonacci tiles.
+	 */
 	public FibonacciSquare(int x, int y, Color c, int quadrant,int n) {
 		super();
 		this.x = x;
@@ -30,19 +37,25 @@ public class FibonacciSquare extends AbstractShape {
 		this.quadrant = quadrant;
 		this.count = 1;
 		this.n = n;
-		this.fN = FibonacciSequence(count);
+		this.fth = FibonacciSequence(count);
 		updateDrawingParameter();
 		updateArc();
 	}
 	
+	/*
+	 *  update rectWide, rectHight, arcWide, arcHight
+	 */
+	
 	public void updateDrawingParameter() {
-		rectWide = 2 * 10 * fN;
+		rectWide = 2 * 10 * fth;
 		rectHight = rectWide;
 		arcWide =2 * rectWide;
 		arcHight = arcWide;
 	}
+	
 	/*
 	 * Calculate fibonacci number
+	 * 
 	 * @param int count
 	 * @return fibonacci number
 	 */
@@ -64,6 +77,7 @@ public class FibonacciSquare extends AbstractShape {
 	 * update the x and y of "Arc", that location depends on x and y of "Rectangle" and quadrant.
 	 * update the angle to draw Arc of the right quadrant.
 	 */
+	
 	public void updateArc() {
 		
 		switch (quadrant) {
@@ -98,6 +112,14 @@ public class FibonacciSquare extends AbstractShape {
 			
 	}
 	
+	/*
+	 * make next size and quadrant Shape.
+	 *  
+	 * @parm int quadrant
+	 * @parm int count
+	 * @return FibonacciSquare
+	 */
+	
 	public FibonacciSquare fibonacciTiles(int quadrant,int count) {
 		int nextX;
 		int nextY;
@@ -128,13 +150,20 @@ public class FibonacciSquare extends AbstractShape {
 		return null;
 		
 	}
+	
+	/*
+	 * make fibonacci tiles to use recursive method.
+	 * @pram int count
+	 * @pram Graphics g
+	 * @pram int n
+	 */
 
 	public void recursiveTiles(int count,Graphics g,int n) {
 		if (count < n) {
 			// recursiveTiles(count-1,g,n);
 			FibonacciSquare s = fibonacciTiles(quadrant,count);
 			s.count = count + 1;
-			s.fN = FibonacciSequence(s.count);
+			s.fth = FibonacciSequence(s.count);
 			s.updateDrawingParameter();
 			s.updateArc();
 			s.draw(g);
@@ -147,8 +176,6 @@ public class FibonacciSquare extends AbstractShape {
 		g.setColor(c);
 		g.drawRect(x, y, rectWide, rectHight);
 		g.drawArc(arcX, arcY, arcWide, arcHight, angle, arcAngle);
-		
-		
 	}
 	
 }
